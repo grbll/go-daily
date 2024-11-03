@@ -16,6 +16,31 @@ func getIndex(row int, column int, mod int) *int {
 
 func convert(s string, numRows int) string {
 	if numRows > 1 {
+		out := make([]byte, len(s))
+		mod := numRows - 1
+
+		row := 0
+		index := 0
+		n := len(s)
+
+		for i := 0; i < n; i++ {
+			out[i] = s[index]
+			index = index + 2*(mod-(index%mod))
+			if index >= n {
+				row++
+				index = row
+			}
+		}
+
+		return string(out)
+
+	} else {
+		return s
+	}
+}
+
+func oldConvert(s string, numRows int) string {
+	if numRows > 1 {
 		mod := numRows - 1
 		out := ""
 		for row := 0; row <= mod; row++ {
