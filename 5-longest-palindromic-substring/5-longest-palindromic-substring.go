@@ -1,8 +1,6 @@
 // attempt on manachers algorithm
 package longestpalindromicsubstring
 
-import "fmt"
-
 func longestPalindrome(s string) string {
 	if len(s) > 0 {
 
@@ -15,10 +13,10 @@ func longestPalindrome(s string) string {
 		for index < 2*len(s)+1 { // number of palindrome centers in s
 
 			for index-(radius+1) >= 0 && index+(radius+1) <= 2*len(s) {
-				if (index-radius)%2 == 0 {
+				if (index-radius)%2 == 1 {
 					radius++
 				} else {
-					if s[(index-radius)/2] == s[(index+radius)/2] {
+					if s[(index-radius-1)/2] == s[(index+radius+1)/2] {
 						radius++
 					} else {
 						break
@@ -51,7 +49,6 @@ func longestPalindrome(s string) string {
 				}
 			}
 		}
-		fmt.Println(s, largestRadius, largestRadius[maxRadiusIndex])
 		return s[(maxRadiusIndex)/2-largestRadius[maxRadiusIndex]/2 : (maxRadiusIndex)/2+maxRadiusIndex%2+(largestRadius[maxRadiusIndex])/2]
 	} else {
 		return ""
