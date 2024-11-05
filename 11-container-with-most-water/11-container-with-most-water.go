@@ -2,32 +2,25 @@ package containerwithmostwater
 
 func maxArea(height []int) int {
 
+	area := 0
 	currentMax := 0
-	n := len(height)
+	i := 0
+	j := len(height) - 1
 
-	if n > 1 {
+	for i < j {
 
-		heightPoints := make([]int, 1, n)
-		heightPoints[0] = 0
-		lastUpdate := 0
-		value := 0
-
-		index1 := 1
-		for index1 < n {
-			index2 := 0
-			for index2 <= lastUpdate {
-				value = min(height[index1], height[heightPoints[index2]]) * (index1 - heightPoints[index2])
-				if value > currentMax {
-					currentMax = value
-				}
-				index2++
-			}
-			if height[index1] > height[lastUpdate] {
-				heightPoints = append(heightPoints, index1)
-				lastUpdate++
-			}
-			index1++
+		if height[i] <= height[j] {
+			area = (j - i) * height[i]
+			i++
+		} else {
+			area = (j - i) * height[j]
+			j--
 		}
+
+		if area > currentMax {
+			currentMax = area
+		}
+
 	}
 	return currentMax
 }
