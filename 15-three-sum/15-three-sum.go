@@ -18,6 +18,7 @@ func jumpDown(nums []int, index *int) {
 
 func threeSum(nums []int) [][]int {
 	sort.Ints(nums)
+
 	lenN := len(nums)
 	out := make([][]int, 0)
 
@@ -26,10 +27,12 @@ func threeSum(nums []int) [][]int {
 	index3 := 0
 	sum := 0
 
-	for index1 < lenN-2 {
+	for index1 < lenN-2 && (nums[index1] <= 0) {
+
 		index2 = index1 + 1
 		index3 = lenN - 1
-		for index2 < index3 {
+
+		for index2 < index3 && nums[index3] >= 0 {
 
 			sum = nums[index1] + nums[index2] + nums[index3]
 
