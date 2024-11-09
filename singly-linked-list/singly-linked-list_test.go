@@ -1,52 +1,117 @@
-package singlylinkedlist_test
+package singlylinkedlist
 
 import (
 	"testing"
-
-	sll "github.com/grbll/go-daily/singly-linked-list"
 )
 
 func TestBuildListNode(t *testing.T) {
-	// Test case: Building a list with multiple values
-	values := []int{1, 2, 3, 4}
-	list := sll.BuildListNode(values)
-
-	current := list
-	for i, val := range values {
-		if current == nil {
-			t.Fatalf("Expected list to have at least %d elements, but found shorter list", len(values))
-		}
-		if current.Val != val {
-			t.Errorf("Expected value at index %d to be %d, got %d", i, val, current.Val)
-		}
-		current = current.Next
+	tests := []struct {
+		name   string
+		input  []int
+		output *ListNode
+	}{
+		{
+			name:   "Single element",
+			input:  []int{1},
+			output: &ListNode{Val: 1},
+		},
+		{
+			name:   "Multiple elements",
+			input:  []int{1, 2, 3, 4, 5},
+			output: &ListNode{Val: 1, Next: &ListNode{Val: 2, Next: &ListNode{Val: 3, Next: &ListNode{Val: 4, Next: &ListNode{Val: 5}}}}},
+		},
+		{
+			name:   "Empty list",
+			input:  []int{},
+			output: nil,
+		},
 	}
 
-	if current != nil {
-		t.Error("Expected end of list, but found extra nodes")
-	}
-}
-
-func TestString(t *testing.T) {
-	// Test case: Empty list
-	emptyList := sll.BuildListNode([]int{})
-	if emptyList.String() != "{}" {
-		t.Errorf("Expected empty list string to be '{}', got %s", emptyList.String())
-	}
-
-	// Test case: List with elements
-	values := []int{1, 2, 3, 4}
-	list := sll.BuildListNode(values)
-	expectedString := "{1,2,3,4,}"
-	if list.String() != expectedString {
-		t.Errorf("Expected list string to be %s, got %s", expectedString, list.String())
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := BuildListNode(tt.input)
+			if got, want := BuildSlice(result), tt.input; !slicesEqual(got, want) {
+				t.Errorf("BuildListNode(%v) = %v, want %v", tt.input, got, want)
+			}
+		})
 	}
 }
 
-func TestBuildListNode_EmptyInput(t *testing.T) {
-	// Test case: Empty input
-	list := sll.BuildListNode([]int{})
-	if list != nil {
-		t.Error("Expected nil list for empty input, got non-nil")
+func TestBuildSlice(t *testing.T) {
+	tests := []struct {
+		name   string
+		input  *ListNode
+		output []int
+	}{
+		{
+			name:   "Single element",
+			input:  &ListNode{Val: 1},
+			output: []int{1},
+		},
+		{
+			name:   "Multiple elements",
+			input:  &ListNode{Val: 1, Next: &ListNode{Val: 2, Next: &ListNode{Val: 3, Next: &ListNode{Val: 4, Next: &ListNode{Val: 5}}}}},
+			output: []int{1, 2, 3, 4, 5},
+		},
+		{
+			name:   "Empty list",
+			input:  nil,
+			output: []int{},
+		},
 	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := BuildSlice(tt.input)
+			if got, want := result, tt.output; !slicesEqual(got, want) {
+				t.Errorf("BuildSlice(%v) = %v, want %v", tt.input, got, want)
+			}
+		})
+	}
+}
+
+func TestListNodeString(t *testing.T) {
+	tests := []struct {
+		name   string
+		input  *ListNode
+		output string
+	}{
+		{
+			name:   "Single element",
+			input:  &ListNode{Val: 1},
+			output: "[1]",
+		},
+		{
+			name:   "Multiple elements",
+			input:  &ListNode{Val: 1, Next: &ListNode{Val: 2, Next: &ListNode{Val: 3, Next: &ListNode{Val: 4, Next: &ListNode{Val: 5}}}}},
+			output: "[1 2 3 4 5]",
+		},
+		{
+			name:   "Empty list",
+			input:  nil,
+			output: "[]",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := tt.input.String()
+			if result != tt.output {
+				t.Errorf("String() = %v, want %v", result, tt.output)
+			}
+		})
+	}
+}
+
+// Helper function to check equality between slices of integers
+func slicesEqual(a, b []int) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	for i := range a {
+		if a[i] != b[i] {
+			return false
+		}
+	}
+	return true
 }

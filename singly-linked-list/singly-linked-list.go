@@ -12,21 +12,18 @@ type ListNode struct {
 }
 
 func (l *ListNode) String() string {
-	if l != nil {
-		sb := strings.Builder{}
-		sb.WriteByte('{')
-		for l.Next != nil {
-			sb.WriteString(strconv.Itoa(l.Val))
-			sb.WriteByte(',')
-			l = l.Next
-		}
+	sb := strings.Builder{}
+	sb.WriteByte('[')
+	for l != nil && l.Next != nil {
 		sb.WriteString(strconv.Itoa(l.Val))
-		sb.WriteByte(',')
-		sb.WriteByte('}')
-		return sb.String()
-	} else {
-		return "{}"
+		sb.WriteRune(' ')
+		l = l.Next
 	}
+	if l != nil {
+		sb.WriteString(strconv.Itoa(l.Val))
+	}
+	sb.WriteByte(']')
+	return sb.String()
 }
 
 func BuildListNode(values []int) *ListNode {
@@ -43,4 +40,13 @@ func BuildListNode(values []int) *ListNode {
 	} else {
 		return nil
 	}
+}
+
+func BuildSlice(head *ListNode) []int {
+	var out []int = []int{}
+	for head != nil {
+		out = append(out, head.Val)
+		head = head.Next
+	}
+	return out
 }
