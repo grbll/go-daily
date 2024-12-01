@@ -10,7 +10,7 @@ func merge(ranges, cutter, newRanges []int) []int {
 		if ranges[indexRanges+1]-1 < cutter[indexCutter] {
 			indexRanges += 2
 		} else if cutter[indexCutter+1]-1 < ranges[indexRanges] {
-			indexCutter++
+			indexCutter += 2
 		} else {
 			if ranges[indexRanges] < cutter[indexCutter] {
 				indexLower = &indexCutter
@@ -19,7 +19,7 @@ func merge(ranges, cutter, newRanges []int) []int {
 				indexLower = &indexRanges
 				lower = &ranges
 			}
-			if ranges[indexRanges+1] < cutter[indexRanges+1] {
+			if ranges[indexRanges+1] < cutter[indexCutter+1] {
 				indexUpper = &indexRanges
 				upper = &ranges
 			} else {
@@ -30,70 +30,44 @@ func merge(ranges, cutter, newRanges []int) []int {
 			*indexUpper += 2
 		}
 	}
-
 	return newRanges
 }
 
-// func isMatch(s string, p string) bool { // new approach, marking s instead of p. old approachl below.
-// 	var n int = len(s)
-//
-// 	var ranges, buildRanges []int = make([]int, 0, n+2), make([]int, 0, n+2)
-// 	var cutterMap map[byte][]int
-// 	var cutter []int
-// 	var rangeIndex int
-//
-// 	ranges = []int{0, 1}
-// 	for _, symbol := range []byte(p) {
-// 		if symbol == '*' {
-// 			ranges = []int{ranges[0], n + 1}
-// 		} else {
-//
-// 			cutter, exists := cutterMap[symbol]
-// 			if !exists {
-// 				cutterMap[symbol] = make([]int, 0, n)
-// 			}
-//
-// 			buildRanges = []int{}
-// 			rangeIndex = 0
-// 			for cutterIndex, boarder := range cutter {
-// 				for boarder <
-// 			}
-// 		}
-// 		if len(ranges) == 0 {
-// 			return false
-// 		}
-// 	}
-// 	return true
-// }
+func isMatch(s string, p string) bool { // new approach, marking s instead of p. old approachl below.
+	var n int = len(s)
 
-// var mustConsume, canConsume int = 0, 0
-// for _, symbol := range []byte(p) {
-// 	if symbol == '*' {
-// 		canConsume = n
-// 	} else {
-// 		mustConsume++
-// 		canConsume = min(canConsume+1, n)
-// 		if symbol != '?' {
-// 			for canConsume >= mustConsume {
-// 				if s[canConsume-1] == symbol {
-// 					break
-// 				} else {
-// 					canConsume--
-// 				}
-// 			}
-// 			for mustConsume <= canConsume {
-// 				if s[mustConsume-1] == symbol {
-// 					break
-// 				} else {
-// 					mustConsume++
-// 				}
-// 			}
-// 		}
-// 	}
-// 	if mustConsume > canConsume {
-// 		return false
-// 	}
-// }
+	var ranges, newRanges []int = make([]int, 0, n+2), make([]int, 0, n+2)
+	var cutterMap map[byte][]int = make(map[byte][]int)
+	var cutter []int
+	var exists bool
+
+	ranges = []int{0, 1}
+	cutterMap['?'] = []int{0, n}
+	for _, symbol := range []byte(p) {
+		if symbol == '*' {
+			ranges = []int{ranges[0], n + 1}
+		} else {
+			cutter, exists = cutterMap[symbol]
+			if !exists {
+				cutterMap[symbol] = make([]int, 0, n+1)
+				for index, letter := range []byte(s) {
+					if (letter == symbol && len(cutterMap[symbol])%2 == 0) || (letter != symbol && len(cutterMap[symbol])%2 != 0) {
+						cutterMap[symbol] = append(cutterMap[symbol], index)
+					}
+				}
+				if len(cutterMap[symbol])%2 != 0 {
+					cutterMap[symbol] = append(cutterMap[symbol], n)
+				}
+				cutter = cutterMap[symbol]
+			}
+			ranges = merge(ranges, cutter, newRanges)
+		}
+		if len(ranges) == 0 {
+			return false
+		}
+	}
+	return ranges[len(ranges)-1] == n+1
+}
 
 // func isMatch(s string, p string) bool {
 // 	var n = len(p)
