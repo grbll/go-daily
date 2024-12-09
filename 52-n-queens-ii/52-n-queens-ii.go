@@ -1,4 +1,4 @@
-package nqueens
+package nqueensii
 
 func check(rowMatrix []int) bool {
 	var n int = len(rowMatrix) - 1
@@ -10,21 +10,8 @@ func check(rowMatrix []int) bool {
 	return true
 }
 
-func solveNQueens(n int) [][]string {
-	var out [][]string = make([][]string, 0)
-
-	var stringMap map[int]string = make(map[int]string)
-	for i := 0; i < n; i++ {
-		var tempLine []byte = make([]byte, n, n)
-		for j := 0; j < n; j++ {
-			if i == j {
-				tempLine[j] = 'Q'
-			} else {
-				tempLine[j] = '.'
-			}
-		}
-		stringMap[i] = string(tempLine)
-	}
+func totalNQueens(n int) int {
+	var total = 0
 
 	var last int
 	var rowMatrix []int = make([]int, 0, n)
@@ -40,10 +27,7 @@ func solveNQueens(n int) [][]string {
 
 		if check(rowMatrix) {
 			if last == n-1 {
-				out = append(out, make([]string, n, n))
-				for i := 0; i < n; i++ {
-					out[len(out)-1][i] = stringMap[rowMatrix[i]]
-				}
+				total++
 				rowMatrix = rowMatrix[:last]
 			} else {
 				rowMatrix = append(rowMatrix, -1)
@@ -51,5 +35,5 @@ func solveNQueens(n int) [][]string {
 		}
 	}
 
-	return out
+	return total
 }

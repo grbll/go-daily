@@ -64,30 +64,6 @@ func Test_check(t *testing.T) {
 	}
 }
 
-func Test_buildString(t *testing.T) {
-	type args struct {
-		rowMatrix []int
-	}
-	tests := []struct {
-		name string
-		args args
-		want []string
-	}{
-		{
-			name: "2x2 board",
-			args: args{rowMatrix: []int{0, 1}},
-			want: []string{"Q.", ".Q"},
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := buildString(tt.args.rowMatrix); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("buildString() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
 func Test_solveNQueens(t *testing.T) {
 	type args struct {
 		n int
