@@ -50,3 +50,15 @@ func BuildSlice(head *ListNode) []int {
 	}
 	return out
 }
+
+func (l1 *ListNode) Equal(l2 *ListNode) bool {
+	for l1.Next != nil {
+		if l1.Val != l2.Val || l2.Next == nil {
+			return false
+		} else {
+			l1 = l1.Next
+			l2 = l2.Next
+		}
+	}
+	return l2.Next == nil
+}
