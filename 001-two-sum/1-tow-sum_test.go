@@ -1,7 +1,7 @@
 package twosum_test
 
 import (
-	twosum "github.com/grbll/go-daily/1-two-sum"
+	twosum "github.com/grbll/go-daily/001-two-sum"
 	"reflect"
 	"testing"
 )
