@@ -14,6 +14,12 @@ func Test_minWindow(t *testing.T) {
 		args args
 		want string
 	}{
+
+		{
+			name: "more complex2",
+			args: args{s: "aaabbaaba", t: "abbb"},
+			want: "bbaab",
+		},
 		{
 			name: "more complex",
 			args: args{s: "ABEBANC", t: "ABC"},

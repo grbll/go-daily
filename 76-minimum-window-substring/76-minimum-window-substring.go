@@ -1,40 +1,84 @@
 package minimumwindowsubstring
 
 func minWindow(s string, t string) string {
-	var indexList []int = make([]int, 0, len(t)+1)
-	var tMap map[byte]int = make(map[byte]int)
-	var bot, top int = -1, len(s)
-	for _, v := range []byte(t) {
-		if _, e := tMap[v]; e {
-			tMap[v]++
-		} else {
-			tMap[v] = 1
+	var tMap [173]int
+	for _, v := range t {
+		tMap[v]++
+	}
+	for i := 0; i < 120; i++ {
+		if tMap[i] == 0 {
+			tMap[i] = -1
 		}
 	}
-	for i, v := range []byte(s) {
-		if num, e := tMap[v]; e {
-			indexList = append(indexList, i)
-			if num == 0 {
-				for pos, index := range indexList {
-					if s[index] == v {
-						indexList = append(indexList[:pos], indexList[pos+1:]...)
-						break
-					}
+
+	var index int = 0
+	for index < len(s) && tMap[s[index]] < 0 {
+		index++
+	}
+	var start, bestStart, bestLength, count int = index, index, len(s) + 1, len(t)
+	for index < len(s) {
+		tMap[s[index]]--
+		if tMap[s[index]] < 0 && s[start] == s[index] {
+			for {
+				if tMap[s[start]] >= 0 {
+					break
+				} else {
+					tMap[s[start]]++
+					start++
 				}
-			} else {
-				tMap[v]--
 			}
-			if len(indexList) == len(t) && indexList[len(t)-1]-indexList[0] < top-bot {
-				bot, top = indexList[0], indexList[len(t)-1]
-			}
+
+		} else if tMap[s[index]] >= 0 {
+			count--
 		}
+		if count == 0 && index-start < bestLength {
+			bestLength = index - start + 1
+			bestStart = start
+		}
+		index++
 	}
-	if bot >= 0 {
-		return s[bot : top+1]
+	if bestLength < len(s)+1 {
+		return s[bestStart : bestStart+bestLength]
 	} else {
 		return ""
 	}
 }
+
+// func minWindow(s string, t string) string {
+// 	var indexList []int = make([]int, 0, len(t)+1)
+// 	var tMap map[byte]int = make(map[byte]int)
+// 	var bot, top int = -1, len(s)
+// 	for _, v := range []byte(t) {
+// 		if _, e := tMap[v]; e {
+// 			tMap[v]++
+// 		} else {
+// 			tMap[v] = 1
+// 		}
+// 	}
+// 	for i, v := range []byte(s) {
+// 		if num, e := tMap[v]; e {
+// 			indexList = append(indexList, i)
+// 			if num == 0 {
+// 				for pos, index := range indexList {
+// 					if s[index] == v {
+// 						indexList = append(indexList[:pos], indexList[pos+1:]...)
+// 						break
+// 					}
+// 				}
+// 			} else {
+// 				tMap[v]--
+// 			}
+// 			if len(indexList) == len(t) && indexList[len(t)-1]-indexList[0] < top-bot {
+// 				bot, top = indexList[0], indexList[len(t)-1]
+// 			}
+// 		}
+// 	}
+// 	if bot >= 0 {
+// 		return s[bot : top+1]
+// 	} else {
+// 		return ""
+// 	}
+// }
 
 // type circle struct {
 // 	values []int
