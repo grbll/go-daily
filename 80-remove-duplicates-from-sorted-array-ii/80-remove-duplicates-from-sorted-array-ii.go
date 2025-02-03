@@ -1,9 +1,11 @@
 package removeduplicatesfromsortedarrayii
 
 func rise(nums []int, index int) {
-	for nums[index] < nums[(len(nums)-1)-(len(nums)-1-index)/2] {
-		nums[index], nums[(len(nums)-1)-(len(nums)-1-index)/2] = nums[(len(nums)-1)-(len(nums)-1-index)/2], nums[index]
-		index = (len(nums) - 1) - (len(nums)-1-index)/2
+	var nextIndex int = (len(nums) - 1) - (len(nums)-2-index)/2
+	for nums[index] < nums[nextIndex] {
+		nums[index], nums[nextIndex] = nums[nextIndex], nums[index]
+		index = nextIndex
+		nextIndex = (len(nums) - 1) - (len(nums)-2-index)/2
 	}
 }
 
