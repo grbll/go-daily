@@ -54,7 +54,7 @@ func convertByteMatrixToRangeMatrix(matrix [][]byte) [][]int {
 }
 
 func maximalRectangle(matrix [][]byte) int {
-	var height, best int = 1, 0
+	var ind, height, best int = 0, 1, 0
 	var rangeMatrix, mergeMatrix [][]int
 	rangeMatrix = convertByteMatrixToRangeMatrix(matrix)
 	var candidates []int = make([]int, 0, len(matrix))
@@ -70,12 +70,14 @@ func maximalRectangle(matrix [][]byte) int {
 		if candidates[len(candidates)-1]+height >= len(matrix) {
 			candidates = candidates[:len(candidates)-1]
 		}
-		for ind, candidate := range candidates {
-			sectionMerge(rangeMatrix[candidate+height], &mergeMatrix[candidate])
-			if len(mergeMatrix[candidate]) == 0 {
+		ind = 0
+		for ind < len(candidates) {
+			sectionMerge(rangeMatrix[candidates[ind]+height], &mergeMatrix[candidates[ind]])
+			if len(mergeMatrix[candidates[ind]]) == 0 {
 				candidates = append(candidates[:ind], candidates[ind+1:]...)
 			} else {
-				best = max(best, (height+1)*sectionSize(mergeMatrix[candidate]))
+				best = max(best, (height+1)*sectionSize(mergeMatrix[candidates[ind]]))
+				ind++
 			}
 		}
 		height++
