@@ -2,24 +2,40 @@ package largestrectangleinhistogram
 
 func largestRectangleArea(heights []int) int {
 	heights = append(heights, 0)
-	var seen []int = make([]int, 1, len(heights))
-	var best, start, curr int = heights[0], 0, 0
-	for ind := 1; ind < len(heights); ind++ {
-		for len(seen) > 1 && heights[seen[len(seen)-1]] > heights[ind] {
-			curr = seen[len(seen)-1]
-			seen = seen[:len(seen)-1]
-			best = max(best, heights[curr]*(start-seen[len(seen)-1]))
-		}
-		if heights[seen[len(seen)-1]] > heights[ind] {
-			best = max(best, heights[seen[0]]*(start+1))
+	var seen []int = []int{-1}
+	var best int = 0
+
+	for i := 0; i < len(heights); i++ {
+		for len(seen) > 1 && heights[seen[len(seen)-1]] >= heights[i] {
+			best = max(best, heights[seen[len(seen)-1]]*(i-seen[len(seen)-2]-1))
 			seen = seen[:len(seen)-1]
 		}
-		seen = append(seen, ind)
-		best = max(best, heights[ind])
-		start = ind
+		seen = append(seen, i)
 	}
+
 	return best
 }
+
+// func largestRectangleArea(heights []int) int {
+// 	heights = append(heights, 0)
+// 	var seen []int = make([]int, 1, len(heights))
+// 	var best, start, curr int = heights[0], 0, 0
+// 	for ind := 1; ind < len(heights); ind++ {
+// 		for len(seen) > 1 && heights[seen[len(seen)-1]] > heights[ind] {
+// 			curr = seen[len(seen)-1]
+// 			seen = seen[:len(seen)-1]
+// 			best = max(best, heights[curr]*(start-seen[len(seen)-1]))
+// 		}
+// 		if heights[seen[len(seen)-1]] > heights[ind] {
+// 			best = max(best, heights[seen[0]]*(start+1))
+// 			seen = seen[:len(seen)-1]
+// 		}
+// 		seen = append(seen, ind)
+// 		best = max(best, heights[ind])
+// 		start = ind
+// 	}
+// 	return best
+// }
 
 // func split(ranges *[][2]int, splitIndices []int) {
 // 	var oldRanges [][2]int = make([][2]int, 0, len(*ranges))
